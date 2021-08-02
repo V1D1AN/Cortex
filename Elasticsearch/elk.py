@@ -37,7 +37,7 @@ class ElasticsearchAnalyzer(Analyzer):
         self.endpoint = self.get_param('config.endpoint', None, 'Elasticsearch endpoint is missing')
         self.index = self.get_param('config.index', None, 'Elasticsearch index is missing')
         # optional
-        #self.verify = self.get_param('config.verifyssl', True, None)
+        self.verify = self.get_param('config.verifyssl', True, None)
         self.client = None
         self.service = self.get_param('config.service', None, 'Service parameter is missing')
 
@@ -45,7 +45,7 @@ class ElasticsearchAnalyzer(Analyzer):
         Analyzer.run(self)
 
         try:
-            self.client = Elasticsearch(self.endpoint,timeout=30, max_retries=10, retry_on_timeout=True)
+            self.client = Elasticsearch(self.endpoint,timeout=30, max_retries=10, verify_certs=False, retry_on_timeout=True)
         except Exception as e:
             self.error("Elasticsearch is not available", e)
             return
